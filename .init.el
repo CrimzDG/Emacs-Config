@@ -8,7 +8,7 @@
    '("e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "d80952c58cf1b06d936b1392c38230b74ae1a2a6729594770762dc0779ac66b7" "2ff9ac386eac4dffd77a33e93b0c8236bb376c5a5df62e36d4bfa821d56e4e20" default))
  '(org-agenda-files nil)
  '(package-selected-packages
-   '(doom-themes doom-modeline dashboard page-break-lines projectile beacon nerd-icons all-the-icons-dired org-modern org-appear lsp-pyright all-the-icons-ivy-rich all-the-icons-ivy all-the-icons ivy-counsel rich vterm ivy lsp-treemacs company-box company org-roam dired-rainbow rainbow-delimiters paredit dired-sidebar eat lsp-mode paradox magit consult vertico use-package gruvbox-theme ##))
+   '(dap-java lsp-java doom-themes doom-modeline dashboard page-break-lines projectile beacon nerd-icons all-the-icons-dired org-modern org-appear lsp-pyright all-the-icons-ivy-rich all-the-icons-ivy all-the-icons ivy-counsel rich vterm ivy lsp-treemacs company-box company org-roam dired-rainbow rainbow-delimiters paredit dired-sidebar eat lsp-mode paradox magit consult vertico use-package gruvbox-theme ##))
  '(paradox-automatically-star t)
  '(paradox-github-token t))
 
@@ -18,7 +18,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-block ((t (:background "#665c54"))))
+ '(org-block-background ((t (:background "#665c54"))))
+ '(org-block-begin-line ((t (:background "#3c3836"))))
+ '(org-block-end-line ((t (:background "#282828" :extend t))))
+ '(org-code ((t (:foreground "#fe8019" :background "#3c3836" :extend t))))
  '(org-hide ((t (:foreground "#32302f"))))
+ '(org-meta-line ((t (:foreground "#fe8019" :background "#282828" :extend t))))
  '(org-modern-done-face ((t (:foreground "#8ec07c" :box (:line-width 2 :style released-button))))))
 (setq mac-option-key-is-meta nil
       mac-command-key-is-meta t
@@ -68,6 +74,8 @@
   :hook ((c++-mode . electric-pair-mode)
 	 (python-mode . electric-pair-mode)))
 
+(use-package lsp-java)
+
 (use-package lsp-mode
   :init
   (setq lsp-keymap-prefix "C-c l")
@@ -75,7 +83,11 @@
   :commands lsp
   :hook ((c++-mode . lsp-deferred)
 	 (js-mode . lsp-deferred)
-	 (python-mode . lsp-deferred)))
+	 (python-mode . lsp-deferred)
+	 (java-mode . lsp-deferred)))
+
+;For dap-mode autoconfig
+(setq dap-auto-configure-features '(sessions locals controls tooltip))
 
 (use-package company
   :custom
@@ -136,10 +148,15 @@
    '(org-block ((t (:background "#3c3836" :extend t))))
    '(org-block-begin-line ((t (:background "#282828" :extend t))))
    '(org-block-end-line ((t (:background "#282828" :extend t))))
-   '(org-meta-line ((t (:foreground "#fe8019" :extend t))))
+   '(org-meta-line ((t (:foreground "#fe8019" :extend t)))))
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t)))))
+   '((python . t)))
+  (setq org-babel-python-command "/usr/bin/python3")
+  (add-to-list 'org-capture-templates
+               '("p" "Programming Knowledge Tidbits" entry
+               (file "~/notes/programmingKnowHow.org")
+               "* %?" :empty-lines 1)))
 
 (use-package org-appear
     :hook
